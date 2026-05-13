@@ -1,26 +1,379 @@
+/* CSS v1.1 - Clean Build */
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-neon: #00f0ff;
+  --secondary-neon: #c026d3;
+  --soft-cyan: #67e8f9;
+  --bg-deep: #0a0a0a;
+  --bg-navy: #020617;
+  --text-primary: #e2e8f0;
+  --text-muted: #64748b;
+  --glow-overlay: rgba(0, 240, 255, 0.08);
+  --border-neon: rgba(0, 240, 255, 0.15);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-dm-sans), sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,240,255,0.4); }
+
+/* Font Classes - Using Next.js Font Variables */
+.font-orbitron { font-family: var(--font-orbitron), sans-serif; }
+.font-rajdhani { font-family: var(--font-rajdhani), sans-serif; }
+.font-dm-sans { font-family: var(--font-dm-sans), sans-serif; }
+.font-mono { font-family: var(--font-jetbrains), monospace; }
+
+/* Neon Text Glow */
+.neon-text {
+  color: var(--primary-neon);
+  text-shadow:
+    0 0 10px rgba(0, 240, 255, 0.8),
+    0 0 30px rgba(0, 240, 255, 0.4),
+    0 0 60px rgba(0, 240, 255, 0.2);
+}
+
+.neon-text-purple {
+  color: var(--secondary-neon);
+  text-shadow:
+    0 0 10px rgba(192, 38, 211, 0.8),
+    0 0 30px rgba(192, 38, 211, 0.4);
+}
+
+/* Neon Border */
+.neon-border {
+  border: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+/* Glass Card */
+.glass-card {
+  background: rgba(2, 6, 23, 0.8);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+}
+
+/* Container */
+.container-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Section Padding */
+.section-padding {
+  padding: 120px 0;
+}
+
+@media (max-width: 1023px) {
+  .section-padding { padding: 80px 0; }
+}
+
+@media (max-width: 767px) {
+  .section-padding { padding: 60px 0; }
+}
+
+/* Skip to content */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-neon);
+  color: var(--bg-deep);
+  padding: 8px 16px;
+  border-radius: 0 0 8px 8px;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-weight: 500;
+  z-index: 9999;
+  transition: top 0.2s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Holographic scan line overlay */
+@keyframes scanLine {
+  0% { background-position: 0 -100%; }
+  100% { background-position: 0 200%; }
+}
+
+.scan-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    transparent 0%,
+    rgba(0, 240, 255, 0.03) 50%,
+    transparent 100%
+  );
+  background-size: 100% 200px;
+  animation: scanLine 4s linear infinite;
+}
+
+/* Holographic gradient border */
+.hologram-border {
+  position: relative;
+}
+
+.hologram-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, #00f0ff, #c026d3, #00f0ff);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+}
+
+/* Custom cursor */
+#cursor-dot,
+#cursor-ring {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s;
+}
+
+#cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary-neon);
+  box-shadow: 0 0 10px var(--primary-neon);
+}
+
+#cursor-ring {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(0, 240, 255, 0.6);
+  transition: width 0.2s, height 0.2s, border-color 0.2s;
+}
+
+#cursor-ring.expanded {
+  width: 40px;
+  height: 40px;
+  border-color: var(--primary-neon);
+}
+
+/* Focus ring */
+*:focus-visible {
+  outline: 2px solid var(--primary-neon);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Neon pill tags */
+.neon-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: var(--soft-cyan);
+  font-size: 0.75rem;
+  font-family: var(--font-jetbrains), monospace;
+  background: rgba(0, 240, 255, 0.05);
+  transition: all 0.2s;
+}
+
+.neon-pill:hover {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: var(--primary-neon);
+  color: var(--primary-neon);
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.float-anim {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse chevron */
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.pulse-opacity {
+  animation: pulseOpacity 1.5s ease-in-out infinite;
+}
+
+/* Typing cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #00f0ff 0%, #c026d3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section label style */
+.section-label {
+  font-family: var(--font-rajdhani), sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--secondary-neon);
+}
+
+/* Scroll progress bar */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: var(--primary-neon);
+  box-shadow: 0 0 12px var(--primary-neon), 0 0 4px var(--primary-neon);
+  transform-origin: left;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+/* Timeline line */
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(0, 240, 255, 0.15);
+  transform: translateX(-50%);
+}
+
+@media (max-width: 767px) {
+  .timeline-line { left: 20px; }
+}
+
+/* Glow button */
+.btn-neon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-family: var(--font-rajdhani), sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: none;
+  outline: none;
+}
+
+.btn-neon-primary {
+  background: var(--primary-neon);
+  color: var(--bg-deep);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 40px rgba(0, 240, 255, 0.1);
+}
+
+.btn-neon-primary:hover {
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.7), 0 0 60px rgba(0, 240, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-neon-ghost {
+  background: transparent;
+  color: var(--primary-neon);
+  border: 1px solid rgba(0, 240, 255, 0.5);
+}
+
+.btn-neon-ghost:hover {
+  background: rgba(0, 240, 255, 0.08);
+  border-color: var(--primary-neon);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Grid utilities */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1023px) {
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 767px) {
+  .projects-grid { grid-template-columns: 1fr; }
+}
+
+/* Input neon styles */
+.neon-input {
+  width: 100%;
+  background: rgba(2, 6, 23, 0.8);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.9rem;
+  padding: 12px 16px;
+  transition: all 0.25s;
+  outline: none;
+}
+
+.neon-input:focus {
+  border-color: var(--primary-neon);
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1), 0 0 20px rgba(0, 240, 255, 0.1);
+}
+
+.neon-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

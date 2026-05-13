@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    optimizePackageImports: ['@react-three/drei', 'lucide-react'],
+  },
+  images: {
+    formats: ['image/webp'],
+  },
 };
 
 export default nextConfig;
